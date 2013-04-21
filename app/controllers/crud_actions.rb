@@ -17,15 +17,42 @@ module CRUDActions
     end
   end
 
+  def new
+    set_entity_instance_variable entity.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: entity_instance_variable }
+    end
+  end
+
   def create
     set_entity_instance_variable entity.new(entity_params)
 
     respond_to do |format|
       if entity_instance_variable.save
-        format.html { redirect_to entity_instance_variable, notice: 'Person was successfully created.' }
+        format.html { redirect_to entity_instance_variable, notice: created_message }
         format.json { render json: entity_instance_variable, status: :created, location: entity_instance_variable }
       else
         format.html { render action: 'new' }
+        format.json { render json: entity_instance_variable.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit
+    set_entity_instance_variable entity.find(params[:id])
+  end
+
+  def update
+    set_entity_instance_variable entity.find(params[:id])
+
+    respond_to do |format|
+      if entity_instance_variable.update_attributes(params[entity_params])
+        format.html { redirect_to entity_instance_variable, notice: updated_message }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
         format.json { render json: entity_instance_variable.errors, status: :unprocessable_entity }
       end
     end
@@ -42,6 +69,14 @@ module CRUDActions
   end
 
   private
+
+  def created_message
+    "#{entity_name.capitalize} was successfully created."
+  end
+
+  def updated_message
+    "#{entity_name.capitalize} was successfully updated."
+  end
 
   def entities_url
     send "#{entities_name}_url"
