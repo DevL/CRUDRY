@@ -1,4 +1,14 @@
 module CRUDActions
+  def self.included(base)
+    base.extend ClassMethods
+  end
+
+  module ClassMethods
+    def entity(entity_class)
+      define_method(:entity) { entity_class }
+    end
+  end
+
   def index
     set_entities_instance_variable entity.all
 
