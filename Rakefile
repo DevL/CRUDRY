@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-TorkaTest::Application.load_tasks
+CRUDRY::Application.load_tasks

@@ -1,4 +1,4 @@
-TorkaTest::Application.routes.draw do
+CRUDRY::Application.routes.draw do
   resources :houses
 
 
